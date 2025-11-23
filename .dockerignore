@@ -1,0 +1,23 @@
+# Ignore the git directory
+.git
+
+# Ignore build artifacts
+*.log
+*.out
+*.tmp
+
+# Ignore the Go build artifacts
+*.exe
+*.test
+*.bak
+*.swp
+
+# Ignore local environment files (if not needed in the container)
+.env
+
+# Ignore Docker-related files
+Dockerfile*
+docker-compose.yml
+
+# Ignore any temporary files
+*.swp

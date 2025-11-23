@@ -1,0 +1,36 @@
+# Ignore Go build artifacts
+/bin/
+/build/
+/dist/
+main  # Exclude the compiled main executable (Linux/macOS)
+main.exe  # Exclude the compiled main executable (Windows)
+*.out
+*.o
+*.a
+*.so
+
+# Ignore Go modules
+/go.sum
+/go.work
+/go.work.sum
+
+# Ignore compiled test binaries
+*.test
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Ignore logs & debug files
+*.log
+debug/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables
+.env
+.env.local
+.env.*.local
