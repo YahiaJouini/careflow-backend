@@ -7,6 +7,7 @@ import (
 
 	"github.com/YahiaJouini/chat-app-backend/internal/db"
 	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
+	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
 	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
 	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
 	"github.com/YahiaJouini/chat-app-backend/pkg/response"
@@ -63,9 +64,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := db.Db.Create(&user)
-	if result.Error != nil {
-		response.ServerError(w)
+	if err := queries.CreateUser(&user); err != nil {
+		response.ServerError(w, "Database error: ", err.Error())
 		return
 	}
 	response.Success(w, nil, "Please validate your email")

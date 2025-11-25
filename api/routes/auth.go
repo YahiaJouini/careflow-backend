@@ -13,7 +13,7 @@ func InitAuthRoutes(router *mux.Router) {
 	router.HandleFunc("/register", auth.Register).Methods("POST")
 	router.HandleFunc("/verify-email", auth.ValidateCode).Methods("POST")
 	router.HandleFunc("/resend-verification", auth.ResendCode).Methods("POST")
-
+	router.HandleFunc("/google-login", auth.GoogleLogin).Methods("POST")
 	// after login
 	router.HandleFunc("/logout", auth.Logout).Methods("POST")
 	router.HandleFunc("/refresh-token", auth.RefreshToken).Methods("POST")

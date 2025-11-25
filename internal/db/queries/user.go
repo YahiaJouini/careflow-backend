@@ -32,6 +32,11 @@ func GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
+func CreateUser(user *models.User) error {
+	result := db.Db.Create(user)
+	return result.Error
+}
+
 func MarkAsVerified(email string) error {
 	result := db.Db.Model(models.User{}).Where("email = ?", email).Update("verified", true)
 	return result.Error
