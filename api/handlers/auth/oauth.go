@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/YahiaJouini/chat-app-backend/internal/config"
+	"github.com/YahiaJouini/chat-app-backend/internal/db"
 	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
 	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
 	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
@@ -59,7 +60,7 @@ func GoogleLogin(w http.ResponseWriter, r *http.Request) {
 			Role:      "patient",
 		}
 
-		if err := queries.CreateUser(&newUser); err != nil {
+		if err := queries.CreateUser(db.Db, &newUser); err != nil {
 			response.ServerError(w, "Could not create user: "+err.Error())
 			return
 		}

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
+	"gorm.io/gorm"
 
 	"github.com/YahiaJouini/chat-app-backend/internal/db"
 	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
@@ -13,7 +14,7 @@ import (
 func GetUserByID(userID uint) (*models.User, error) {
 	var user models.User
 
-	result := db.Db.Take(&user, "id = ?", userID)
+	result := db.Db.Preload("Doctor").Preload("Doctor.Specialty").Take(&user, "id = ?", userID)
 	if result.Error != nil {
 		return nil, errors.New("user not found")
 	}
@@ -32,8 +33,93 @@ func GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func CreateUser(user *models.User) error {
-	result := db.Db.Create(user)
+type UpdateUserBody struct {
+	// user Fields
+	FirstName *string `json:"firstName" validate:"omitempty,min=3,max=30"`
+	LastName  *string `json:"lastName" validate:"omitempty,min=3,max=30"`
+	Image     *string `json:"image" validate:"omitempty,url"`
+
+	// doctor fields
+	Bio             *string  `json:"bio" validate:"omitempty,max=500"`
+	ConsultationFee *float64 `json:"consultationFee" validate:"omitempty,gte=0"`
+	IsAvailable     *bool    `json:"isAvailable" validate:"omitempty"`
+}
+
+func UpdateUser(userID uint, body UpdateUserBody) (*models.User, error) {
+	var updatedUser models.User
+
+	err := db.Db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Preload("Doctor").First(&updatedUser, userID).Error; err != nil {
+			return err
+		}
+
+		// update basic fields
+		if body.FirstName != nil {
+			updatedUser.FirstName = *body.FirstName
+		}
+		if body.LastName != nil {
+			updatedUser.LastName = *body.LastName
+		}
+		if body.Image != nil {
+			updatedUser.Image = *body.Image
+		}
+
+		if err := tx.Save(&updatedUser).Error; err != nil {
+			return err
+		}
+
+		if updatedUser.Role == "doctor" {
+			if updatedUser.Doctor.UserID == 0 {
+				return errors.New("doctor profile missing data integrity error")
+			}
+
+			// apply updates to the nested struct
+			if body.Bio != nil {
+				updatedUser.Doctor.Bio = *body.Bio
+			}
+			if body.ConsultationFee != nil {
+				updatedUser.Doctor.ConsultationFee = *body.ConsultationFee
+			}
+			if body.IsAvailable != nil {
+				updatedUser.Doctor.IsAvailable = *body.IsAvailable
+			}
+
+			if err := tx.Save(&updatedUser.Doctor).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil // commit transaction
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return GetUserByID(userID)
+}
+
+func DeleteUser(userID uint) error {
+	return db.Db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("user_id = ?", userID).Delete(&models.Doctor{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Delete(&models.User{}, userID).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
+func CreateUser(db *gorm.DB, user *models.User) error {
+	result := db.Create(user)
+	return result.Error
+}
+
+// always use this in a transaction !!
+func CreateDoctor(db *gorm.DB, doctor *models.Doctor) error {
+	result := db.Create(doctor)
 	return result.Error
 }
 
@@ -56,36 +142,4 @@ func UpdateVerificationCode(email string) (string, int, error) {
 	user.CodeExpirationTime = expiresAt
 	db.Db.Save(&user)
 	return newCode, 200, nil
-}
-
-func UpdateUser(userID uint, body UpdateUserBody) (*models.User, error) {
-	// fetch user first (same principle as GetUserByID)
-	user, err := GetUserByID(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	// apply only non-nil updates
-	if body.FirstName != nil {
-		user.FirstName = *body.FirstName
-	}
-	if body.LastName != nil {
-		user.LastName = *body.LastName
-	}
-	if body.Image != nil {
-		user.Image = *body.Image
-	}
-
-	// save changes
-	if err := db.Db.Save(&user).Error; err != nil {
-		return nil, err
-	}
-
-	return user, nil
-}
-
-type UpdateUserBody struct {
-	FirstName *string `json:"firstName" validate:"omitempty,min=3,max=30"`
-	LastName  *string `json:"lastName" validate:"omitempty,min=3,max=30"`
-	Image     *string `json:"image" validate:"omitempty,url"`
 }

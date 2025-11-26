@@ -8,15 +8,13 @@ import (
 	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
 	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
 	"github.com/YahiaJouini/chat-app-backend/pkg/response"
-	"github.com/go-playground/validator/v10"
+	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
 )
 
 type LoginBody struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password"`
 }
-
-var Validate = validator.New()
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var body LoginBody
@@ -26,7 +24,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//  validate req body
-	if err := Validate.Struct(body); err != nil {
+	if err := utils.Validate.Struct(body); err != nil {
 		response.Error(w, 0, err.Error())
 		return
 	}

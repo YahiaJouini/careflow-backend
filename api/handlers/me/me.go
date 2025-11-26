@@ -1,4 +1,4 @@
-package user
+package me
 
 import (
 	"encoding/json"
@@ -8,10 +8,8 @@ import (
 	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
 	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
 	"github.com/YahiaJouini/chat-app-backend/pkg/response"
-	"github.com/go-playground/validator/v10"
+	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
 )
-
-var Validate = validator.New()
 
 func GetUser(w http.ResponseWriter, r *http.Request) {
 	claims, _ := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
@@ -38,7 +36,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// validate req body
-	if err := Validate.Struct(body); err != nil {
+	if err := utils.Validate.Struct(body); err != nil {
 		response.Error(w, 0, err.Error())
 		return
 	}
@@ -50,4 +48,17 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Success(w, updatedUser, "User updated successfully")
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	claims := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
+
+	err := queries.DeleteUser(claims.UserID)
+	if err != nil {
+		response.Error(w, 0, err.Error())
+		return
+	}
+
+	auth.Logout(w)
+	response.Success(w, nil, "User deleted successfully")
 }

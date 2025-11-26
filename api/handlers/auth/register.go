@@ -11,6 +11,8 @@ import (
 	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
 	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
 	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
+	"gorm.io/gorm"
 )
 
 type RegisterBody struct {
@@ -18,6 +20,10 @@ type RegisterBody struct {
 	LastName  string `json:"lastName" validate:"required,min=3,max=30"`
 	Email     string `json:"email" validate:"required,email"`
 	Password  string `json:"password" validate:"required,min=6"`
+
+	Role          string  `json:"role" validate:"omitempty,oneof=patient doctor"` // Restrict to patient or doctor only. No Admin registration here.
+	SpecialtyID   *uint   `json:"specialtyId"`                                    // required only if doctor
+	LicenseNumber *string `json:"licenseNumber"`                                  // required only if doctor
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -28,12 +34,23 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// validate req body
-	if err := Validate.Struct(body); err != nil {
+	if err := utils.Validate.Struct(body); err != nil {
 		response.Error(w, 0, err.Error())
 		return
 	}
-	var user models.User
-	if result := db.Db.Take(&user, "email = ?", body.Email); result.Error == nil {
+
+	if body.Role == "doctor" {
+		if body.SpecialtyID == nil || body.LicenseNumber == nil {
+			response.Error(w, http.StatusBadRequest, "Doctors must provide a SpecialtyID and LicenseNumber")
+			return
+		}
+	} else {
+		// default to patient if empty or invalid
+		body.Role = "patient"
+	}
+
+	var existingUser models.User
+	if result := db.Db.Select("id").Take(&existingUser, "email = ?", body.Email); result.Error == nil {
 		response.Error(w, http.StatusConflict, "Account with this email already exists.")
 		return
 	}
@@ -50,13 +67,40 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	expiresAt := time.Now().Add(15 * time.Minute)
-	user = models.User{
+
+	user := models.User{
 		FirstName:          body.FirstName,
 		LastName:           body.LastName,
 		Email:              body.Email,
 		Password:           hashedPassword,
+		Role:               body.Role,
 		VerificationCode:   verificationCode,
 		CodeExpirationTime: expiresAt,
+		Verified:           false,
+	}
+
+	err = db.Db.Transaction(func(tx *gorm.DB) error {
+		// create the User
+		if err := queries.CreateUser(tx, &user); err != nil {
+			return err
+		}
+
+		if body.Role == "doctor" {
+			doctor := models.Doctor{
+				UserID:        user.ID,
+				SpecialtyID:   *body.SpecialtyID,
+				LicenseNumber: *body.LicenseNumber,
+			}
+			if err := queries.CreateDoctor(tx, &doctor); err != nil {
+				return err
+			}
+		}
+
+		return nil // commit
+	})
+	if err != nil {
+		response.ServerError(w, "Database error: "+err.Error())
+		return
 	}
 
 	if result := mails.SendMail(body.Email, verificationCode); result.Err != nil {
@@ -64,9 +108,5 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := queries.CreateUser(&user); err != nil {
-		response.ServerError(w, "Database error: ", err.Error())
-		return
-	}
 	response.Success(w, nil, "Please validate your email")
 }

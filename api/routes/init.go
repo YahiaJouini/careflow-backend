@@ -13,12 +13,20 @@ func InitializeRoutes() *mux.Router {
 	// auth router
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	// user router
-	userRouter := router.PathPrefix("/user").Subrouter()
+	userRouter := router.PathPrefix("/me").Subrouter()
 	userRouter.Use(middleware.AuthMiddleware(middleware.All))
+
+	// admin router
+	adminRouter := router.PathPrefix("/admin").Subrouter()
+	adminRouter.Use(middleware.AuthMiddleware(middleware.Admin))
+
+	publicRouter := router.PathPrefix("/public").Subrouter()
 
 	// init routers
 	InitAuthRoutes(authRouter)
 	InitUserRoutes(userRouter)
+	InitAdminRoutes(adminRouter)
+	InitPublicRoutes(publicRouter)
 	return router
 }
 

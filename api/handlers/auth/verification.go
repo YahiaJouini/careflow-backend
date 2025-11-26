@@ -11,6 +11,7 @@ import (
 	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
 	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
 	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
 )
 
 type ValidateCodeReq struct {
@@ -31,7 +32,7 @@ func ValidateCode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//  validate req body
-	if err := Validate.Struct(body); err != nil {
+	if err := utils.Validate.Struct(body); err != nil {
 		response.Error(w, 0, err.Error())
 		return
 	}
@@ -93,7 +94,7 @@ func ResendCode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := Validate.Struct(body); err != nil {
+	if err := utils.Validate.Struct(body); err != nil {
 		response.Error(w, http.StatusBadRequest, err.Error())
 		return
 	}
