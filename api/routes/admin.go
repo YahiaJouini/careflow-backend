@@ -18,4 +18,7 @@ func InitAdminRoutes(router *mux.Router) {
 	router.HandleFunc("/users/{id}", admin.DeleteUser).Methods("DELETE")
 	router.HandleFunc("/users/{id}/role", admin.UpdateUserRole).Methods("PATCH")
 	router.HandleFunc("/doctors/{id}/verify", admin.VerifyDoctor).Methods("PATCH")
+
+	// statistics
+	router.HandleFunc("/stats", admin.GetDashboardOverview).Methods("GET")
 }

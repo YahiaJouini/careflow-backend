@@ -39,7 +39,6 @@ func AuthMiddleware(requiredRole role) func(http.Handler) http.Handler {
 
 			claims, err := auth.VerifyToken(string(tokenParts[1]), auth.AccessToken)
 			if err != nil {
-				auth.Logout(w)
 				response.Unauthorized(w, "Invalid or expired token")
 				return
 			}

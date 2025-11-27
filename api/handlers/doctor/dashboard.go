@@ -1,0 +1,22 @@
+package doctor
+
+import (
+	"net/http"
+
+	"github.com/YahiaJouini/chat-app-backend/api/middleware"
+	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
+	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
+	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+)
+
+func GetDashboardOverview(w http.ResponseWriter, r *http.Request) {
+	claims, _ := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
+
+	stats, err := queries.GetDoctorStats(claims.UserID)
+	if err != nil {
+		response.ServerError(w, "Failed to calculate doctor stats")
+		return
+	}
+
+	response.Success(w, stats, "Doctor dashboard stats retrieved")
+}
