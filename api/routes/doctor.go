@@ -8,16 +8,12 @@ import (
 func InitDoctorRoutes(router *mux.Router) {
 	router.HandleFunc("/stats", doctor.GetDashboardOverview).Methods("GET")
 
-	// --- Appointments ---
-	// Read
+	// appointments routes
 	router.HandleFunc("/appointments", doctor.GetAppointments).Methods("GET")
-
-	// Validate (Confirm/Complete)
 	router.HandleFunc("/appointments/{id}/validate", doctor.ValidateAppointment).Methods("PATCH")
-
-	// Update (Edit Notes/Date)
 	router.HandleFunc("/appointments/{id}", doctor.UpdateAppointment).Methods("PUT")
-
-	// Delete (Cancel)
 	router.HandleFunc("/appointments/{id}", doctor.CancelAppointment).Methods("DELETE")
+
+	// patients routes
+	router.HandleFunc("/patients", doctor.GetPatients).Methods("GET")
 }

@@ -2,6 +2,7 @@ package queries
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/YahiaJouini/chat-app-backend/internal/db"
 	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
@@ -27,20 +28,25 @@ func GetAllUsers(roleFilter string) ([]models.User, error) {
 }
 
 // VerifyDoctor sets IsVerified to true for a specific user's doctor profile
-func VerifyDoctor(userID uint) error {
-	var user models.User
+func VerifyDoctor(doctorID uint) error {
+	var doctor models.Doctor
 
-	// Check if user exists and is a doctor
-	if err := db.Db.Preload("Doctor").First(&user, userID).Error; err != nil {
-		return errors.New("user not found")
+	// DEBUG LOGS -------------------------
+	fmt.Printf("--- DEBUG: VerifyDoctor Called ---\n")
+	fmt.Printf("Received Doctor ID: %d\n", doctorID)
+	// ------------------------------------
+
+	// FIX: We search by Primary Key (ID), NOT user_id
+	if err := db.Db.First(&doctor, doctorID).Error; err != nil {
+		fmt.Printf("--- DEBUG: Doctor lookup failed: %v ---\n", err) // Log error
+		return errors.New("doctor not found with this ID")
 	}
 
-	if user.Role != "doctor" || user.Doctor == nil {
-		return errors.New("user is not a doctor")
-	}
+	fmt.Printf("--- DEBUG: Found Doctor for UserID: %d. Verifying... ---\n", doctor.UserID)
 
-	// Update the Doctor table specifically
-	if err := db.Db.Model(&models.Doctor{}).Where("user_id = ?", userID).Update("is_verified", true).Error; err != nil {
+	doctor.IsVerified = true
+
+	if err := db.Db.Save(&doctor).Error; err != nil {
 		return err
 	}
 

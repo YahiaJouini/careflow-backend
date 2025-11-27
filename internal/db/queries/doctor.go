@@ -34,7 +34,6 @@ func GetDoctorAppointments(userID uint) ([]models.Appointment, error) {
 	var appointments []models.Appointment
 	err = db.Db.Preload("Patient").
 		Where("doctor_id = ?", doctorID).
-zsh:1: command not found: a
 		Find(&appointments).Error
 
 	return appointments, err
@@ -99,4 +98,21 @@ func CancelAppointmentDoctor(userID uint, appointmentID uint) error {
 
 	appt.Status = models.StatusCancelled
 	return db.Db.Save(&appt).Error
+}
+
+func GetDoctorPatients(userID uint) ([]models.User, error) {
+	doctorID, err := getDoctorID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var patients []models.User
+
+	err = db.Db.Model(&models.User{}).
+		Joins("JOIN appointments ON appointments.patient_id = users.id").
+		Where("appointments.doctor_id = ?", doctorID).
+		Group("users.id").
+		Find(&patients).Error
+
+	return patients, err
 }

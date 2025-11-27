@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/YahiaJouini/chat-app-backend/api/routes"
 	"github.com/YahiaJouini/chat-app-backend/internal/config"
 	"github.com/YahiaJouini/chat-app-backend/internal/db"
 	"github.com/rs/cors"
-	"log"
-	"net/http"
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:4173"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 		MaxAge:           86400,
