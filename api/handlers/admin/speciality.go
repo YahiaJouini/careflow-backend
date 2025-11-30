@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
-	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
+	"github.com/YahiaJouini/careflow/internal/db"
+	"github.com/YahiaJouini/careflow/internal/db/models"
+	"github.com/YahiaJouini/careflow/pkg/response"
+	"github.com/YahiaJouini/careflow/pkg/utils"
 	"github.com/gorilla/mux"
 )
 

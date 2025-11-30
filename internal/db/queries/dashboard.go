@@ -3,8 +3,8 @@ package queries
 import (
 	"time"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
+	"github.com/YahiaJouini/careflow/internal/db"
+	"github.com/YahiaJouini/careflow/internal/db/models"
 )
 
 type AdminDashboardStats struct {
@@ -22,11 +22,9 @@ type DoctorDashboardStats struct {
 	CompletedVisits      int64   `json:"completedVisits"`
 }
 
-// GetAdminStats: Aggregates system-wide data
 func GetAdminStats() (*AdminDashboardStats, error) {
 	stats := &AdminDashboardStats{}
 
-	// Run these in parallel or sequence, sequence is fine for now
 	if err := db.Db.Model(&models.User{}).Count(&stats.TotalUsers).Error; err != nil {
 		return nil, err
 	}

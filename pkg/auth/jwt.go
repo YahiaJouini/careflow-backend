@@ -3,8 +3,8 @@ package auth
 import (
 	"errors"
 	"fmt"
-	"github.com/YahiaJouini/chat-app-backend/internal/config"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
+	"github.com/YahiaJouini/careflow/internal/config"
+	"github.com/YahiaJouini/careflow/internal/db/models"
 	"github.com/golang-jwt/jwt/v5"
 	"log"
 	"net/http"

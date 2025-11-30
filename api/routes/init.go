@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/YahiaJouini/chat-app-backend/api/middleware"
+	"github.com/YahiaJouini/careflow/api/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -20,12 +20,15 @@ func InitializeRoutes() *mux.Router {
 	adminRouter := router.PathPrefix("/admin").Subrouter()
 	adminRouter.Use(middleware.AuthMiddleware(middleware.Admin))
 
+	// patient router
 	patientRouter := router.PathPrefix("/patient").Subrouter()
 	patientRouter.Use(middleware.AuthMiddleware(middleware.Patient))
 
+	// doctor router
 	doctorRouter := router.PathPrefix("/doctor").Subrouter()
 	doctorRouter.Use(middleware.AuthMiddleware(middleware.Doctor))
 
+	// public router
 	publicRouter := router.PathPrefix("/public").Subrouter()
 
 	// init routers

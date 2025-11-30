@@ -4,11 +4,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
+	"github.com/YahiaJouini/careflow/pkg/mails"
 	"gorm.io/gorm"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
+	"github.com/YahiaJouini/careflow/internal/db"
+	"github.com/YahiaJouini/careflow/internal/db/models"
 )
 
 func GetUserByID(userID uint) (*models.User, error) {

@@ -1,4 +1,4 @@
-module github.com/YahiaJouini/chat-app-backend
+module github.com/YahiaJouini/careflow
 
 go 1.24.0
 

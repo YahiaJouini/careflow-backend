@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
-	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
-	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
+	"github.com/YahiaJouini/careflow/internal/db"
+	"github.com/YahiaJouini/careflow/internal/db/models"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/auth"
+	"github.com/YahiaJouini/careflow/pkg/mails"
+	"github.com/YahiaJouini/careflow/pkg/response"
+	"github.com/YahiaJouini/careflow/pkg/utils"
 	"gorm.io/gorm"
 )
 
@@ -21,9 +21,9 @@ type RegisterBody struct {
 	Email     string `json:"email" validate:"required,email"`
 	Password  string `json:"password" validate:"required,min=6"`
 
-	Role          string  `json:"role" validate:"omitempty,oneof=patient doctor"` // Restrict to patient or doctor only. No Admin registration here.
-	SpecialtyID   *uint   `json:"specialtyId"`                                    // required only if doctor
-	LicenseNumber *string `json:"licenseNumber"`                                  // required only if doctor
+	Role          string  `json:"role" validate:"omitempty,oneof=patient doctor"`
+	SpecialtyID   *uint   `json:"specialtyId"`   // required only if doctor
+	LicenseNumber *string `json:"licenseNumber"` // required only if doctor
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {

@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/YahiaJouini/chat-app-backend/api/middleware"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
-	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
+	"github.com/YahiaJouini/careflow/api/middleware"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/auth"
+	"github.com/YahiaJouini/careflow/pkg/response"
+	"github.com/YahiaJouini/careflow/pkg/utils"
 )
 
 func GetUser(w http.ResponseWriter, r *http.Request) {

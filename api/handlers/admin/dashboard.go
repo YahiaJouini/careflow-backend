@@ -3,8 +3,8 @@ package admin
 import (
 	"net/http"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/response"
 )
 
 func GetDashboardOverview(w http.ResponseWriter, r *http.Request) {

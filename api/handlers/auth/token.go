@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/auth"
+	"github.com/YahiaJouini/careflow/pkg/response"
 )
 
 type RefreshTokenRequest struct {

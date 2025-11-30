@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
-	"github.com/YahiaJouini/chat-app-backend/pkg/mails"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
-	"github.com/YahiaJouini/chat-app-backend/pkg/utils"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/auth"
+	"github.com/YahiaJouini/careflow/pkg/mails"
+	"github.com/YahiaJouini/careflow/pkg/response"
+	"github.com/YahiaJouini/careflow/pkg/utils"
 )
 
 type ValidateCodeReq struct {

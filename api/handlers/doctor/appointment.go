@@ -5,14 +5,13 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/YahiaJouini/chat-app-backend/api/middleware"
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/auth"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+	"github.com/YahiaJouini/careflow/api/middleware"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/auth"
+	"github.com/YahiaJouini/careflow/pkg/response"
 	"github.com/gorilla/mux"
 )
 
-// GET /doctor/appointments
 func GetAppointments(w http.ResponseWriter, r *http.Request) {
 	claims, _ := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
 
@@ -24,7 +23,6 @@ func GetAppointments(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, data, "Doctor appointments retrieved")
 }
 
-// PATCH /doctor/appointments/{id}/validate
 func ValidateAppointment(w http.ResponseWriter, r *http.Request) {
 	claims, _ := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
 	vars := mux.Vars(r)
@@ -44,7 +42,6 @@ func ValidateAppointment(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, data, "Appointment status updated")
 }
 
-// PUT /doctor/appointments/{id}
 func UpdateAppointment(w http.ResponseWriter, r *http.Request) {
 	claims, _ := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
 	vars := mux.Vars(r)
@@ -64,7 +61,6 @@ func UpdateAppointment(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, data, "Appointment updated successfully")
 }
 
-// DELETE /doctor/appointments/{id}
 func CancelAppointment(w http.ResponseWriter, r *http.Request) {
 	claims, _ := r.Context().Value(middleware.UserClaimsKey).(*auth.Claims)
 	vars := mux.Vars(r)

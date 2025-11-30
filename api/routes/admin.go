@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/YahiaJouini/chat-app-backend/api/handlers/admin"
+	"github.com/YahiaJouini/careflow/api/handlers/admin"
 	"github.com/gorilla/mux"
 )
 

@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"github.com/YahiaJouini/chat-app-backend/internal/config"
+	"github.com/YahiaJouini/careflow/internal/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"

@@ -3,8 +3,8 @@ package routes
 import (
 	"net/http"
 
-	"github.com/YahiaJouini/chat-app-backend/api/handlers/auth"
-	"github.com/YahiaJouini/chat-app-backend/api/middleware"
+	"github.com/YahiaJouini/careflow/api/handlers/auth"
+	"github.com/YahiaJouini/careflow/api/middleware"
 	"github.com/gorilla/mux"
 )
 

@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/config"
+	"github.com/YahiaJouini/careflow/internal/config"
 	"gopkg.in/gomail.v2"
 )
 

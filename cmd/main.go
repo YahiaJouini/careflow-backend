@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/YahiaJouini/chat-app-backend/api/routes"
-	"github.com/YahiaJouini/chat-app-backend/internal/config"
-	"github.com/YahiaJouini/chat-app-backend/internal/db"
+	"github.com/YahiaJouini/careflow/api/routes"
+	"github.com/YahiaJouini/careflow/internal/config"
+	"github.com/YahiaJouini/careflow/internal/db"
 	"github.com/rs/cors"
 )
 

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db/queries"
-	"github.com/YahiaJouini/chat-app-backend/pkg/response"
+	"github.com/YahiaJouini/careflow/internal/db/queries"
+	"github.com/YahiaJouini/careflow/pkg/response"
 )
 
 func GetDoctors(w http.ResponseWriter, r *http.Request) {
@@ -27,6 +27,5 @@ func GetDoctors(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Return Response
 	response.Success(w, data, "Doctors retrieved successfully")
 }

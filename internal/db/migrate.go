@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/YahiaJouini/chat-app-backend/internal/db/models"
+	"github.com/YahiaJouini/careflow/internal/db/models"
 )
 
 func Migrate() {
