@@ -22,7 +22,7 @@ func InitializeRoutes() *mux.Router {
 
 	// patient router
 	patientRouter := router.PathPrefix("/patient").Subrouter()
-	patientRouter.Use(middleware.AuthMiddleware(middleware.Patient))
+	// patientRouter.Use(middleware.AuthMiddleware(middleware.Patient))
 
 	// doctor router
 	doctorRouter := router.PathPrefix("/doctor").Subrouter()

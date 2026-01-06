@@ -14,7 +14,7 @@ func GetDashboardOverview(w http.ResponseWriter, r *http.Request) {
 
 	stats, err := queries.GetDoctorStats(claims.UserID)
 	if err != nil {
-		response.ServerError(w, "Failed to calculate doctor stats")
+		response.ServerError(w, err.Error())
 		return
 	}
 

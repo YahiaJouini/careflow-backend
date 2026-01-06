@@ -18,7 +18,7 @@ func GetPatients(w http.ResponseWriter, r *http.Request) {
 
 	patients, err := queries.GetDoctorPatients(claims.UserID)
 	if err != nil {
-		response.ServerError(w, "Failed to fetch patients")
+		response.ServerError(w, err.Error())
 		return
 	}
 

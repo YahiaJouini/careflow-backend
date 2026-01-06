@@ -30,7 +30,7 @@ func ValidateAppointment(w http.ResponseWriter, r *http.Request) {
 
 	var req queries.ValidateAppointmentRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		response.Error(w, http.StatusBadRequest, "Invalid request body")
+		response.Error(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

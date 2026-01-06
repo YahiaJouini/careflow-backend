@@ -10,4 +10,5 @@ func InitPatientRoutes(router *mux.Router) {
 	router.HandleFunc("/appointments", patient.GetAppointments).Methods("GET")
 	router.HandleFunc("/appointments/{id}", patient.UpdateAppointment).Methods("PUT")
 	router.HandleFunc("/appointments/{id}", patient.CancelAppointment).Methods("DELETE")
+	router.HandleFunc("/health-assistance", patient.HealthAssistance).Methods("POST")
 }

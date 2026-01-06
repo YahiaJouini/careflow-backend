@@ -23,11 +23,7 @@ func CreateAppointment(w http.ResponseWriter, r *http.Request) {
 
 	data, err := queries.CreateAppointment(claims.UserID, req)
 	if err != nil {
-		if err.Error() == "Doctor not found" || err.Error() == "Doctor is currently unavailable" {
-			response.Error(w, http.StatusBadRequest, err.Error())
-		} else {
-			response.ServerError(w, "Failed to create appointment")
-		}
+		response.Error(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -59,11 +55,7 @@ func UpdateAppointment(w http.ResponseWriter, r *http.Request) {
 
 	data, err := queries.UpdateAppointment(uint(id), claims.UserID, req)
 	if err != nil {
-		if err.Error() == "Appointment not found" {
-			response.Error(w, http.StatusNotFound, "Appointment not found or unauthorized")
-		} else {
-			response.ServerError(w, "Failed to update appointment")
-		}
+		response.Error(w, http.StatusNotFound, err.Error())
 		return
 	}
 
