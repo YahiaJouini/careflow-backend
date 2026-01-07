@@ -1,6 +1,7 @@
 package public
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func GetDoctors(w http.ResponseWriter, r *http.Request) {
-	queryParam := r.URL.Query().Get("specialityId")
+	queryParam := r.URL.Query().Get("specialtyId")
 	var specialtyID uint
 
 	if queryParam != "" {
@@ -20,6 +21,8 @@ func GetDoctors(w http.ResponseWriter, r *http.Request) {
 		}
 		specialtyID = uint(id)
 	}
+
+	fmt.Println("Fetching doctors with specialty ID:", specialtyID)
 
 	data, err := queries.GetPublicDoctors(specialtyID)
 	if err != nil {

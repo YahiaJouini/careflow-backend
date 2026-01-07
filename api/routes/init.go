@@ -13,8 +13,9 @@ func InitializeRoutes() *mux.Router {
 	// auth router
 	authRouter := router.PathPrefix("/auth").Subrouter()
 	// user router
-	userRouter := router.PathPrefix("/me").Subrouter()
-	userRouter.Use(middleware.AuthMiddleware(middleware.All))
+	meRouter := router.PathPrefix("/me").Subrouter()
+	meRouter.Use(middleware.AuthMiddleware(middleware.All))
+	InitUserRoutes(meRouter)
 
 	// admin router
 	adminRouter := router.PathPrefix("/admin").Subrouter()
@@ -22,7 +23,7 @@ func InitializeRoutes() *mux.Router {
 
 	// patient router
 	patientRouter := router.PathPrefix("/patient").Subrouter()
-	// patientRouter.Use(middleware.AuthMiddleware(middleware.Patient))
+	patientRouter.Use(middleware.AuthMiddleware(middleware.Patient))
 
 	// doctor router
 	doctorRouter := router.PathPrefix("/doctor").Subrouter()
@@ -33,7 +34,7 @@ func InitializeRoutes() *mux.Router {
 
 	// init routers
 	InitAuthRoutes(authRouter)
-	InitUserRoutes(userRouter)
+
 	InitAdminRoutes(adminRouter)
 	InitPatientRoutes(patientRouter)
 	InitPublicRoutes(publicRouter)
