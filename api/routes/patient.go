@@ -6,6 +6,7 @@ import (
 )
 
 func InitPatientRoutes(router *mux.Router) {
+	router.HandleFunc("/stats", patient.GetDashboardOverview).Methods("GET")
 	router.HandleFunc("/me", patient.GetPatient).Methods("GET")
 	router.HandleFunc("/me", patient.UpdatePatient).Methods("PUT")
 
